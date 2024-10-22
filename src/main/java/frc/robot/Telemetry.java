@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
 
@@ -47,6 +49,8 @@ public class Telemetry {
     private Pose2d m_lastPose = new Pose2d();
     private double lastTime = Utils.getCurrentTimeSeconds();
 
+    public Supplier<Pose2d> telemetryCurrentPose;
+
     /* Mechanisms to represent the swerve module states */
     private final Mechanism2d[] m_moduleMechanisms = new Mechanism2d[] {
         new Mechanism2d(1, 1),
@@ -90,6 +94,7 @@ public class Telemetry {
         lastTime = currentTime;
         Translation2d distanceDiff = pose.minus(m_lastPose).getTranslation();
         m_lastPose = pose;
+        telemetryCurrentPose = () -> pose;
 
         Translation2d velocities = distanceDiff.div(diffTime);
 
